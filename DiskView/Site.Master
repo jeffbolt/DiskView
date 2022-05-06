@@ -1,0 +1,52 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="DiskView.Site" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+	<title>Disk View</title>
+	
+	<webopt:BundleReference runat="server" path="~/Content/css" />
+
+	<%--Get latest at https://cdnjs.com/libraries/font-awesome --%>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<asp:ContentPlaceHolder ID="cphHead" runat="server" ClientIDMode="Static">
+	</asp:ContentPlaceHolder>
+</head>
+<body>
+	<form id="Master" runat="server">
+		<%-- Used for creating/verifying a new Session ID --%>
+		<asp:HiddenField ID="SessionID" runat="server" />
+
+		<%-- Header --%>
+		<header style="color: white; background-color: #5D7B9D; height: 50px">
+			<asp:ContentPlaceHolder ID="cphTop" runat="server" ClientIDMode="Static">
+				<div class="valign-middle pad10 small-caps" style="font-size: 22px">
+					HEADER
+				</div>
+				<%--<nav class="navbar navbar-default navbar-epic" role="navigation">
+					<asp:PlaceHolder ID="phHeader" runat="server" Visible="false"></asp:PlaceHolder>
+					<asp:PlaceHolder ID="phNavMenu" runat="server" Visible="false"></asp:PlaceHolder>
+				</nav>--%>
+			</asp:ContentPlaceHolder>
+		</header>
+		<asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+		<div class="pad10">
+            <asp:ContentPlaceHolder ID="cphBody" runat="server" ClientIDMode="Static">
+			</asp:ContentPlaceHolder>
+		</div>
+
+		<%-- Footer --%>
+		<footer class="footer">
+			<div class="container">
+				<div style="width: 100%; height: auto;"></div>
+				<asp:ContentPlaceHolder ID="cphFooter" runat="server" ClientIDMode="Static">
+					<div>Copyright &copy; 2022</div>
+				</asp:ContentPlaceHolder>
+			</div>
+			<div class="padb20"></div>
+		</footer>
+	</form>
+</body>
+</html>

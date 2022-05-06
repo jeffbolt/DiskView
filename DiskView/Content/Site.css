@@ -1,0 +1,203 @@
+﻿/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+	/*padding-top: 50px;*/
+	padding-bottom: 20px;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	/*font-size: 9pt;
+	max-width: 1280px;*/
+	-webkit-font-smoothing: antialiased;
+}
+
+table {
+	border: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
+	padding: 0;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+input,
+select,
+textarea {
+	max-width: 280px;
+}
+
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+	.jumbotron {
+		margin-top: 20px;
+	}
+
+	.body-content {
+		padding: 0;
+	}
+}
+
+.form-table td {
+	vertical-align: top;
+	padding: 8px;
+}
+
+.tile {
+	float: left;
+	width: 425px;
+}
+
+/* Font attributes */
+.thin {
+	font-weight: 100;
+}
+
+.extra-light {
+	font-weight: 200;
+}
+
+.light {
+	font-weight: 300;
+}
+
+.normal {
+	font-weight: 400;
+}
+
+.medium {
+	font-weight: 500;
+}
+
+.semi-bold {
+	font-weight: 600;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.extra-bold {
+	font-weight: 800;
+}
+
+.heavy-bold {
+	font-weight: 900;
+}
+
+.italic {
+	font-style: italic;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+.small-caps {
+	font-variant: small-caps;
+}
+
+/* Word break */
+.breakable {
+	-ms-word-break: break-all;
+	word-break: break-all;
+	-ms-word-wrap: break-word;
+	word-wrap: break-word;
+}
+
+.unbreakable {
+	-ms-word-break: keep-all;
+	word-break: keep-all;
+	-ms-word-wrap: normal;
+	word-wrap: normal;
+}
+
+/* Scrolling */
+.scrollable {
+	display: block;
+	overflow: auto;
+	border: thin inset;
+}
+
+.scrollable-borderless {
+	display: block;
+	overflow: auto;
+	border: none;
+}
+
+/* Opacity */
+.opacity-25 {
+	filter: alpha(opacity=25);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	opacity: .25;
+}
+
+.opacity-50 {
+	filter: alpha(opacity=50);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	opacity: .5;
+}
+
+.opacity-75 {
+	filter: alpha(opacity=75);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	opacity: .75;
+}
+
+/* Positioning */
+.float-left {
+	float: left;
+}
+
+.clear-both {
+	clear: both;
+}
+
+/* Alignment */
+.align-right {
+	text-align: right;
+}
+
+.align-left {
+	text-align: left;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.valign-top {
+	vertical-align: top;
+}
+
+.valign-middle {
+	vertical-align: middle;
+}
+
+.valign-bottom {
+	vertical-align: baseline;
+}
+
+/* Padding */
+.pad10 {
+	padding: 10px;
+}
+
+.padb4 {
+	padding-bottom: 4px;
+}
+
+.padb20 {
+	padding-bottom: 20px;
+}
+
+/* Widths */
+.min-width-100 {
+	min-width: 100px;
+}
