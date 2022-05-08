@@ -6,10 +6,17 @@
 <head runat="server">
 	<title>Disk View</title>
 	
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<link rel="icon" sizes="192x192" href="/favicon-192x192.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png">
+	<%--<link rel="manifest" href="/site.webmanifest">--%>
+
 	<webopt:BundleReference runat="server" path="~/Content/css" />
 
-	<%--Get latest at https://cdnjs.com/libraries/font-awesome --%>
+	<%-- Get latest at https://cdnjs.com/libraries/font-awesome --%>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0" />
 
 	<asp:ContentPlaceHolder ID="cphHead" runat="server" ClientIDMode="Static">
 	</asp:ContentPlaceHolder>
@@ -23,7 +30,7 @@
 		<header style="color: white; background-color: #5D7B9D; height: 50px">
 			<asp:ContentPlaceHolder ID="cphTop" runat="server" ClientIDMode="Static">
 				<div class="valign-middle pad10 small-caps" style="font-size: 22px">
-					HEADER
+					Disk View
 				</div>
 				<%--<nav class="navbar navbar-default navbar-epic" role="navigation">
 					<asp:PlaceHolder ID="phHeader" runat="server" Visible="false"></asp:PlaceHolder>

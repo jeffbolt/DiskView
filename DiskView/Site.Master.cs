@@ -85,15 +85,15 @@ namespace DiskView
 			}
 
 			// Homebrew Anti-XSRF validation - ensure request is coming from the same host and port
-			string httpReferer = Request.ServerVariables["HTTP_REFERER"]?.ToString();
-			if (Uri.TryCreate(httpReferer, UriKind.Absolute, out Uri uriReferer))
-			{
-				string referer = uriReferer.GetComponents(UriComponents.HostAndPort, UriFormat.UriEscaped);
-				string host = Request.Url.GetComponents(UriComponents.HostAndPort, UriFormat.UriEscaped);
+			//string httpReferer = Request.ServerVariables["HTTP_REFERER"]?.ToString();
+			//if (Uri.TryCreate(httpReferer, UriKind.Absolute, out Uri uriReferer))
+			//{
+			//	string referer = uriReferer.GetComponents(UriComponents.HostAndPort, UriFormat.UriEscaped);
+			//	string host = Request.Url.GetComponents(UriComponents.HostAndPort, UriFormat.UriEscaped);
 
-				if (referer != host) //(!uriReferer.Equals(uriHost))
-					throw new InvalidOperationException("Form submitted from a foreign host.");
-			}
+			//	if (referer != host) //(!uriReferer.Equals(uriHost))
+			//		throw new InvalidOperationException("Form submitted from a foreign host.");
+			//}
 		}
 		#endregion
 

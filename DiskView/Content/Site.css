@@ -51,6 +51,19 @@ textarea {
 	width: 425px;
 }
 
+.datagrid {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 9pt;
+}
+
+	.datagrid td {
+		padding: 0 2px 0 2px;
+	}
+
+		.datagrid img {
+			padding-right: 2px;
+		}
+
 /* Font attributes */
 .thin {
 	font-weight: 100;

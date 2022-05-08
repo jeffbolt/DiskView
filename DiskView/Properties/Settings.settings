@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DiskView.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DefaultFileDataUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFZSURBVDhPjZNbcoJAEEVdUnaYxAfxgdEIimjEYNQd4SL88Su8Bqszd5iRR+cjU3WLH85puqfpmHM6nej7eKTD4UBhGNJ+/0VBENDnbkfb7Zb8zQbPm+u6TxppHsD3+/2RAimqnM9nulwutPb9vyWoDDAXgvJcUJbnlGU5pToQXK9XiqKIPM+7aaw6+GwlMHBDkCmBbdsq88WCNFYd9AwBh0tBmmaUyAhR0Gz+wQUYGPrmsIyGjWA6m3EBpo1hMVhWN3CSpkpgT9+5AFcFQRuuqqcUJ6VgYk+5APdcCiTUAHUkbASj8YQL1mtfCgoOysoGLgWChqMxF6w8j4QUtGEDqsSJ2hNrOOSC5WpVCuSL9YomPxJGIBhYb1zguEvVXxuMkxKsC3oDiwsWjtMU1KC2oNvvcwHWU/0H/8hLt8cFWE9sGJYE94yrwrQxMPSMz0ZlwM+vXS3odH4ByCWlQa2uev8AAAAASUVORK5CYII=</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
