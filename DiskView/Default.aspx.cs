@@ -37,7 +37,57 @@ namespace DiskView
 				rootFolder = @"C:\Users\jbolt\OneDrive - Wiley\Documents\Graphics\Icons and Cursors";
 				foreach (string dirname in Directory.GetDirectories(rootFolder))
 				{
+					Icon icon;
 					var directoryInfo = new DirectoryInfo(dirname);
+					string desktopIni = Path.Combine(directoryInfo.FullName, "desktop.ini");
+					if (File.Exists(desktopIni))
+					{
+						string[] contents = File.ReadAllLines(desktopIni);
+						if (contents.Contains("[.ShellClassInfo]"))
+						{
+							string line = contents.FirstOrDefault(x => x.StartsWith("IconResource="));
+							if (!string.IsNullOrEmpty(line))
+							{
+								/* Ex:	IconResource=%SystemRoot%\system32\imageres.dll,-198
+										IconResource=C:\Windows\explorer.exe,1
+										IconResource=C:\Users\jbolt\Documents\Visual Studio 2017\folder.ico,0
+								*/
+								string iconResource = line.Split('=')[1];
+								var resource = iconResource.Split(',');
+								string iconPath = resource[0];
+								if (iconPath.StartsWith("%"))
+								{
+									// Replace any system environment variables, i.e. %SystemRoot%\ = "C:\\WINDOWS"
+									string sysVar = iconPath.Substring(0, iconPath.LastIndexOf("%") + 1);
+									string envVar = sysVar.Replace("%", "");
+									iconPath = iconPath.Replace(sysVar, Environment.GetEnvironmentVariable(envVar));
+								}
+
+								int iconNumber = int.Parse(resource[1]);
+
+								if (File.Exists(iconPath))
+								{
+									var fi = new FileInfo(iconPath);
+									switch (fi.Extension.ToUpper())
+									{
+										case ".DLL":
+										case ".EXE":
+										case ".ICL":
+											// Extract icon from binary file
+											// TODO: Why does this return null?
+											icon = PInvoke.GetIconFromExe(iconPath, iconNumber.ToString(), 16);
+											break;
+
+										case ".ICO":
+											// Load from .ico file
+											icon = new Icon(iconPath, 16, 16);
+											break;
+									}
+								}
+							}
+						}
+					}
+
 					foreach (FileInfo fileInfo in directoryInfo.GetFiles())
 					{
 						DataRow dr = dt.NewRow();
@@ -105,25 +155,8 @@ namespace DiskView
 						}
 					}
 				}
-					
-
+			
 				e.Item.Cells[0].Text = $"<div><img src='{dataUri}' style='padding: 0 4px 0 2px' />{e.Item.Cells[0].Text}</div>";
-
-				//Bitmap bmp = icon.ToBitmap();
-				//if (bmp != null)
-				//{
-				//	using (var ms = new MemoryStream())
-				//	{
-				//		bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-				//		string base64 = Convert.ToBase64String(ms.GetBuffer());
-				//		string dataUri = $"data:image/png;base64,{base64}";
-
-				//		e.Item.Cells[0].Text = $"<div><img src='{dataUri}' style='padding: 0 4px 0 2px' />{e.Item.Cells[0].Text}</div>";
-				//	}
-				//}
-
-				// Draw the bitmap.
-				//e.Graphics.DrawImage(bmp, new Point(30, 30))
 
 				if (DateTime.TryParse(e.Item.Cells[1].Text, out DateTime dt))
 					e.Item.Cells[1].Text = dt.ToString("g");

@@ -40,7 +40,7 @@ namespace DiskView
 		public static string GetFileSizeSuffix(long value, int decimalPlaces = 0)
 		{
 			// https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc#14488941
-			string[] SizeSuffixes = { "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };  // { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+			string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
 			if (decimalPlaces < 0) throw new ArgumentOutOfRangeException("decimalPlaces");
 			if (value < 0) return "-" + GetFileSizeSuffix(-value, decimalPlaces);

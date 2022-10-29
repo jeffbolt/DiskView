@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace DiskView
@@ -9,6 +10,7 @@ namespace DiskView
         http://www.pinvoke.net/default.aspx/shell32/SHGetFileInfo.html
         https://stackoverflow.com/questions/1437382/get-file-type-in-net#1437451
     */
+
 	public static class PInvoke
 	{
 		/// <summary>Maximal Length of unmanaged Windows-Path-strings</summary>
@@ -28,36 +30,27 @@ namespace DiskView
 			public string szTypeName;
 		};
 
-		//[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-		//public struct SHFILEINFO
-		//{
-		//	public SHFILEINFO(bool b)
-		//	{
-		//		hIcon = IntPtr.Zero;
-		//		iIcon = 0;
-		//		dwAttributes = 0;
-		//		szDisplayName = "";
-		//		szTypeName = "";
-		//	}
-		//	public IntPtr hIcon;
-		//	public int iIcon;
-		//	public uint dwAttributes;
-		//	[MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_PATH)]
-		//	public string szDisplayName;
-		//	[MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_TYPE)]
-		//	public string szTypeName;
-		//};
-
 		public static class FILE_ATTRIBUTE
 		{
-			public const uint FILE_ATTRIBUTE_NORMAL = 0x80;
+			// https://docs.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants
+			public const uint FILE_ATTRIBUTE_ARCHIVE = 0x20;                    // 32
+			public const uint FILE_ATTRIBUTE_COMPRESSED = 0x800;                // 2048
+			public const uint FILE_ATTRIBUTE_DEVICE = 0x40;                     // 64 
+			public const uint FILE_ATTRIBUTE_DIRECTORY = 0x10;                  // 16
+			public const uint FILE_ATTRIBUTE_ENCRYPTED = 0x4000;                // 16384
+			public const uint FILE_ATTRIBUTE_NORMAL = 0x80;                     // 128
+			public const uint FILE_ATTRIBUTE_NOT_CONTENT_INDEXED = 0x2000;      // 8192
+			public const uint FILE_ATTRIBUTE_NO_SCRUB_DATA = 0x20000;           // 131072
+			public const uint FILE_ATTRIBUTE_OFFLINE = 0x1000;                  // 4096
+			public const uint FILE_ATTRIBUTE_READONLY = 0x1;                    // 1
+			public const uint FILE_ATTRIBUTE_RECALL_ON_DATA_ACCESS = 0x400000;  // 14194304
+			public const uint FILE_ATTRIBUTE_RECALL_ON_OPEN = 0x40000;          // 262144
+			public const uint FILE_ATTRIBUTE_REPARSE_POINT = 0x400;             // 1024
+			public const uint FILE_ATTRIBUTE_SPARSE_FILE = 0x200;               // 512
+			public const uint FILE_ATTRIBUTE_SYSTEM = 0x4;                      // 3
+			public const uint FILE_ATTRIBUTE_TEMPORARY = 0x100;                 // 256
+			public const uint FILE_ATTRIBUTE_VIRTUAL = 0x10000;                 // 65536
 		}
-
-		//public static class SHGFI
-		//{
-		//	public const uint SHGFI_TYPENAME = 0x000000400;
-		//	public const uint SHGFI_USEFILEATTRIBUTES = 0x000000010;
-		//}
 
 		[Flags]
 		public enum SHGFI : uint
@@ -106,17 +99,6 @@ namespace DiskView
 		[DllImport("shell32.dll", CharSet = CharSet.Auto)]
 		public static extern int SHGetFileInfo(string pszPath, int dwFileAttributes, out SHFILEINFO psfi, uint cbfileInfo, SHGFI uFlags);
 
-		//public static string GetFileType(string filePath)
-		//{
-		//	var info = new SHFILEINFO();
-		//	uint dwFileAttributes = FILE_ATTRIBUTE.FILE_ATTRIBUTE_NORMAL;
-		//	uint uFlags = (uint)(SHGFI.SHGFI_TYPENAME | SHGFI.SHGFI_USEFILEATTRIBUTES);
-
-		//	SHGetFileInfo(filePath, dwFileAttributes, ref info, (uint)Marshal.SizeOf(info), uFlags);
-
-		//	return info.szTypeName;
-		//}
-
 		public static string GetFileType(string filePath)
 		{
 			var info = new SHFILEINFO();
@@ -132,21 +114,84 @@ namespace DiskView
 		/// Returns the associated Icon for a file or application.
 		/// If the file path is invalid or there is no icon, the default icon is returned.
 		/// </summary>
-		/// <param name="strPath">Full path to the file</param>
-		/// <param name="bSmall">If true, the 16x16 icon is returned otherwise the 32x32</param>
+		/// <param name="filePath">Full path to the file</param>
+		/// <param name="small">If true, the 16x16 icon is returned otherwise the 32x32</param>
 		/// <returns></returns>
-		public static Icon GetIcon(string strPath, bool bSmall)
+		public static Icon GetIcon(string filePath, bool small)
 		{
 			SHFILEINFO info = new SHFILEINFO();
 			int cbFileInfo = Marshal.SizeOf(info);
 			SHGFI flags;
-			if (bSmall)
+			if (small)
 				flags = SHGFI.Icon | SHGFI.SmallIcon | SHGFI.UseFileAttributes;
 			else
 				flags = SHGFI.Icon | SHGFI.LargeIcon | SHGFI.UseFileAttributes;
 
-			SHGetFileInfo(strPath, 256, out info, (uint)cbFileInfo, flags);
+			SHGetFileInfo(filePath, 256, out info, (uint)cbFileInfo, flags);
 			return Icon.FromHandle(info.hIcon);
+		}
+
+		// http://pinvoke.net/default.aspx/user32/LoadImage.html
+		// http://www.itln.pl
+		[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		private static extern IntPtr LoadImage(IntPtr hinst, string lpszName, uint uType,
+			int cxDesired, int cyDesired, uint fuLoad);
+
+		[DllImport("user32.dll", SetLastError = true)]
+		private static extern int DestroyIcon(IntPtr hIcon);
+
+		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		private static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hFile, LoadLibraryFlags dwFlags);
+
+		private enum LoadLibraryFlags : uint
+		{
+			DONT_RESOLVE_DLL_REFERENCES = 0x00000001,
+			LOAD_IGNORE_CODE_AUTHZ_LEVEL = 0x00000010,
+			LOAD_LIBRARY_AS_DATAFILE = 0x00000002,
+			LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE = 0x00000040,
+			LOAD_LIBRARY_AS_IMAGE_RESOURCE = 0x00000020,
+			LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008
+		}
+
+		/// <summary>
+		/// Returns an icon of given size.
+		/// </summary>
+		/// <param name="path">Path to a file (.exe/.dll) that contains the icons.
+		///        Skip it or use <c>null</c> to use current application's file.</param>
+		/// <param name="resId">Name of the resource icon that should be loaded.
+		///        Skip it to use the default <c>#32512</c> (value of <c>IDI_APPLICATION</c>) to use
+		///        the application's icon.</param>
+		/// <param name="size">Size of the icon to load. If there is no such size available, a larger or smaller
+		///        sized-icon is scaled.</param>
+		/// <returns>List of all icons.</returns>
+		public static Icon GetIconFromExe(string path = null, string resId = "#32512", int size = 32)
+		{
+			// load module
+			IntPtr h;
+			if (path == null)
+				h = Marshal.GetHINSTANCE(Assembly.GetEntryAssembly().GetModules()[0]);
+			else
+			{
+				h = LoadLibraryEx(path, IntPtr.Zero, LoadLibraryFlags.LOAD_LIBRARY_AS_DATAFILE);
+				if (h == IntPtr.Zero)
+					return null;
+			}
+
+			// 1 is IMAGE_ICON
+			IntPtr ptr = LoadImage(h, resId, 1, size, size, 0);
+			if (ptr != IntPtr.Zero)
+			{
+				try
+				{
+					Icon icon = (Icon)Icon.FromHandle(ptr).Clone();
+					return icon;
+				}
+				finally
+				{
+					DestroyIcon(ptr);
+				}
+			}
+			return null;
 		}
 	}
 }
